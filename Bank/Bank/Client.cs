@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 //--------------------------------------------------------------
 namespace BankName
 {
-    interface ITransaction
-    {
-        double Amount { get; set; }
-        DateTime DT { get; set; }
-    }
+	class Client : BaseClient
+	{
+		public Client(double percent, string name, string surname, string address, double balance, Currency currency) : base(percent, name, surname, address, balance, currency)
+		{
+		}
+	}
 }
 //--------------------------------------------------------------

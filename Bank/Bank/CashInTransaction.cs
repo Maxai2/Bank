@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 //--------------------------------------------------------------
 namespace BankName
 {
-    public enum Currency { USD, RUB, AZN, EUR }
+	class CashInTransaction : ITransaction
+	{
+		BaseClient to;
 
-    interface IAccount
-    { 
-        double balance { get; set; }
-        Currency currency { get; set; }
+		public double Amount { get; set; }
+		public DateTime DT { get; set; }
 
-		CashInTransaction CashIn();
-		WithDrawTransaction WithDraw();
-		TransferTransaction Transfer(BaseClient obj);
+		public CashInTransaction(double Amount, DateTime DT, BaseClient to)
+		{
+			this.Amount = Amount;
+			this.DT = DT;
+			this.to = to;
+		}
 	}
 }
 //--------------------------------------------------------------

@@ -1,0 +1,38 @@
+enum Currency 
+
+IAccount
+	balance
+	currency
+	CashIn()
+	Withdraw()
+	Transfer()
+	
+BaseClient : IAccount
+	percent
+	name
+	surname
+	address
+	
+Client: BaseClient
+GoldenClient: BaseClient
+PlatinumClient: BaseClient
+
+ITransaction
+	amount
+	time
+	
+CashInTransaction : ITransaction
+	to
+WithdrawTransaction : ITransaction
+	from
+TransferTransaction : ITransaction
+	to
+	from
+	
+Bank
+	BaseClient[]
+	ITransaction[]
+	SaveTransactions()
+	event Percent
+	event Bankrupt
+	

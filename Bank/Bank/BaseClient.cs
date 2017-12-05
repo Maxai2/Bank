@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 //--------------------------------------------------------------
 namespace BankName
 {
-    class BaseClient : IAccount
+    abstract class BaseClient : IAccount//, IComparable
     {
         double percent;
         string name;
@@ -14,32 +14,96 @@ namespace BankName
         string address;
 
         public double balance { get; set; }
-        public Curency curency { get; set; }
+        public Currency currency { get; set; }
 
-        public BaseClient(double percent, string name, string surname, string address, double balance, Curency curency) 
+		public BaseClient(double percent, string name, string surname, string address, double balance, Currency currency) 
         {
             this.percent = percent;
             this.name = name;
             this.surname = surname;
             this.address = address;
             this.balance = balance;
-            this.curency = curency;
+            this.currency = currency;
         }
 
-        public ITransaction CashIn()
-        {
-            throw new NotImplementedException();
-        }
+		public CashInTransaction CashIn()
+		{
+			Console.Write($"Input sum(in {CurrencyName(currency)}): ");
+			balance += Convert.ToDouble(Console.ReadLine());
+			Console.WriteLine($"Balance: {balance}{CurrencyName(currency)}");
+			CashInTransaction ct = new CashInTransaction(balance, DateTime.Now, this);
+			return ct;
+		}
 
-        public ITransaction Transfer()
-        {
-            throw new NotImplementedException();
-        }
+		public WithDrawTransaction WithDraw()
+		{
+			if (balance == 0)
+			{ 
+				Console.WriteLine("Your balance is 0!");
+				return null;
+			}
+			else
+			{ 
+				Console.WriteLine($"Balance: {balance}{CurrencyName(currency)}");
+				Console.Write("Sum for out: ");
+				int sum = Convert.ToInt32(Console.ReadLine());
+				if (balance - sum > 0)
+				{
+					Console.WriteLine($"Balance: {balance - sum}{CurrencyName(currency)}");
+					WithDrawTransaction wt = new WithDrawTransaction(balance, DateTime.Now, this);
+					return wt;
+				}
+				else
+				{ 
+					Console.WriteLine($"You have not enough money for this transaction!");
+					return null;
+				}
+			}
+		}
 
-        public ITransaction Withdraw()
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public TransferTransaction Transfer(BaseClient obj)
+		{
+			Console.WriteLine($"From {surname} {name} to {obj.surname} {obj.name}");
+			Console.WriteLine($"Your balance: {balance}");
+			Console.Write($"Input sum for transfer: ");
+			int sum = Convert.ToInt32(Console.ReadLine());
+			if (balance - sum > 0)
+			{
+				Console.WriteLine($"Balance: {balance - sum}{CurrencyName(currency)}");
+				TransferTransaction tt = new TransferTransaction(balance, DateTime.Now, obj, this);
+				return tt;
+			}
+			else
+			{ 
+				Console.WriteLine($"You have not enough money for this transaction!");
+				return null;
+			}
+		}
+
+		private string CurrencyName(Currency cur)
+		{
+			switch (cur)
+			{
+				case Currency.USD:
+					return "USD";
+				case Currency.RUB:
+					return "RUB";
+				case Currency.AZN:
+					return "AZN";
+				case Currency.EUR:
+					return "EUR";
+			}
+
+			return "Error Currency!";
+		}
+
+		//public int CompareTo(object obj)
+		//{
+		//	if (this is Client)
+		//	{
+
+		//	}
+		//}
+	}
 }
 //--------------------------------------------------------------
