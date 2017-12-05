@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 //--------------------------------------------------------------
 namespace BankName
 {
-    interface ITransaction
+    public interface ITransaction
     {
         double Amount { get; set; }
         DateTime DT { get; set; }

@@ -8,8 +8,8 @@ namespace BankName
 {
     public enum Curency { USD, RUB, AZN, EUR }
 
-    interface IAccount
-    {
+    public interface IAccount
+    { 
         double balance { get; set; }
         Curency currency { get; set; }
     }
