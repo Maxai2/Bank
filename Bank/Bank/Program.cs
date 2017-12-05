@@ -41,8 +41,16 @@ namespace BankName
 				switch (key)
 				{
 					case ConsoleKey.DownArrow:
+                        if (select < menuName.Length - 1)
+                            select++;
+                        break;
+                    case ConsoleKey.UpArrow:
+                        if (select > 0)
+                            select--;
+                        break;
+                    case ConsoleKey.Enter:
+                        if (select == 0)
 
-					default:
 				}
 			}					
         }
