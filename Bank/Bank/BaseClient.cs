@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 //--------------------------------------------------------------
 namespace BankName
 {
-    abstract class BaseClient : IAccount//, IComparable
+    abstract class BaseClient : IAccount, IComparable
     {
-        double percent;
-        string name;
-        string surname;
-        string address;
+		public double percent;
+		public string name;
+		public string surname;
+		public string address;
+		public char[] password = new char[4];
 
         public double balance { get; set; }
         public Currency currency { get; set; }
 
-		public BaseClient(double percent, string name, string surname, string address, double balance, Currency currency) 
+		public BaseClient(double percent, string name, string surname, string address, double balance, Currency currency, char[] password) 
         {
             this.percent = percent;
             this.name = name;
@@ -24,6 +25,7 @@ namespace BankName
             this.address = address;
             this.balance = balance;
             this.currency = currency;
+			this.password = password;
         }
         //--------------------------------------------------------------
         public CashInTransaction CashIn()
@@ -132,14 +134,15 @@ namespace BankName
                 return null;
             }
 		}
-        //--------------------------------------------------------------
-        //public int CompareTo(object obj)
-        //{
-        //	if (this is Client)
-        //	{
-
-        //	}
-        //}
-    }
+		//--------------------------------------------------------------
+		public int CompareTo(object obj)
+		{
+			if (name == ((obj as BaseClient).name))
+			{
+				return 1;
+			}
+			return -1;
+		}
+	}
 }
 //--------------------------------------------------------------

@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 //--------------------------------------------------------------
 namespace BankName
 {
-	class Bank : IEnumerable
+	class Bank : IEnumerable, IEnumerator
 	{
 		public List<BaseClient> Client = new List<BaseClient>();
 		public List<ITransaction> Transaction = new List<ITransaction>();
-        //--------------------------------------------------------------
-        void SaveTransaction()
+
+		//--------------------------------------------------------------
+		void SaveTransaction()
 		{
 			string path = @"Log.txt";
 
@@ -30,13 +31,29 @@ namespace BankName
 				}
 			}
 		}
-        //--------------------------------------------------------------
+		//--------------------------------------------------------------
+		int current = -1;
+
+		public object Current => Client[current];
+
         public IEnumerator GetEnumerator()
 		{
 			return (IEnumerator)this;
 		}
-        //--------------------------------------------------------------
-        public delegate void BankOperation();
+
+		public bool MoveNext()
+		{
+			current++;
+			return current < Client.Count;
+		}
+
+		public void Reset()
+		{
+			current = -1;
+		}
+
+		//--------------------------------------------------------------
+		public delegate void BankOperation();
 		public event BankOperation Bankrot;
 		public event BankOperation PersUp;
     }

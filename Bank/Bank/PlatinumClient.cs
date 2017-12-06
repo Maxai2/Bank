@@ -8,7 +8,7 @@ namespace BankName
 {
 	class PlatinumClient : BaseClient
 	{
-		public PlatinumClient(string name, string surname, string address, double balance, Currency currency, double percent = 1) : base(percent, name, surname, address, balance, currency)
+		public PlatinumClient(string name, string surname, string address, double balance, Currency currency, char[] password, double percent = 1) : base(percent, name, surname, address, balance, currency, password)
 		{
 		}
 	}

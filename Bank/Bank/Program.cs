@@ -8,7 +8,7 @@ namespace BankName
 {
     class Program
     {
-        static string[] menuName = { "Add Client", "Operation", "Compare", "Month +", "Bankrot", "Return Card" };
+        static string[] menuName = { "Add Client", "Operation", "Month +", "Bankrot", "Return Card" };
 
         static void menu(int sel)
         {
@@ -123,13 +123,17 @@ namespace BankName
             else
                 goto BAL;
 
+			Console.Write("Password: ");
+			string password = Console.ReadLine();
+
             Console.WriteLine();
             Console.WriteLine("Check");
             Console.WriteLine($"Name: {name}");
             Console.WriteLine($"Surname: {surname}");
             Console.WriteLine($"Address: {address}");
             Console.WriteLine($"Balance: {balance}");
-            Console.WriteLine($"Currency: {curtemp}\n");
+            Console.WriteLine($"Currency: {curtemp}");
+			Console.WriteLine($"Password: {password}\n");
             Console.Write("Allright or again?(y/n): ");
             ans = Console.ReadKey(true).KeyChar;
 
@@ -144,7 +148,7 @@ namespace BankName
             {
                 case ConsoleKey.D1:
                 case ConsoleKey.NumPad1:
-                    Client ctemp = new Client(name, surname, address, balance, curtemp);
+                    Client ctemp = new Client(name, surname, address, balance, curtemp, password);
                     b.Client.Add(ctemp);
                     break;
                 case ConsoleKey.D2:
@@ -169,8 +173,33 @@ namespace BankName
             Console.SetCursorPosition(25, 0);
             Console.WriteLine($"Client Count: {count}");
         }
-        //--------------------------------------------------------------
-        static void Main(string[] args)
+		//--------------------------------------------------------------
+		static void Operation(Bank b)
+		{
+			Console.WriteLine("Select, how u want sort clients");
+			Console.WriteLine("1 - Name");
+			Console.WriteLine("2 - Surname");
+			Console.WriteLine("3 - Balane");
+			Console.WriteLine("4 - Curreny");
+			Console.WriteLine("5 - Percent");
+
+			var key = Console.ReadKey(true).Key;
+			switch (key)
+			{
+				case ConsoleKey.D1:
+				case ConsoleKey.NumPad1:
+					b.Client.Sort();
+				break;
+			}
+
+			Console.WriteLine();
+			foreach (var item in b.Client)
+			{
+				Console.WriteLine($"{item.name} {item.surname}");				
+			}
+		}
+		//--------------------------------------------------------------        
+		static void Main(string[] args)
         {
 			Bank B = new Bank();
 			int select = 0;
@@ -186,34 +215,56 @@ namespace BankName
 				switch (key)
 				{
 					case ConsoleKey.DownArrow:
-                        if (select < menuName.Length - 1)
-                            select++;
-                        break;
-                    case ConsoleKey.UpArrow:
-                        if (select > 0)
-                            select--;
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        select = 0;
-                        break;
-                    case ConsoleKey.RightArrow:
-                        select = 5;
-                        break;
-                    case ConsoleKey.Enter:
-                        if (select == 0)
-                        {
-                            Console.Clear();
-                            Console.CursorVisible = true;
-                            AddClient(B);
-                            Console.Clear();
-                            Console.CursorVisible = false;
-                        }
-                        else
-                        if (select == 5)
-                            Console.Clear();
-                            Environment.Exit(1);
-                        break;
-                        
+						if (select < menuName.Length - 1)
+							select++;
+						break;
+					case ConsoleKey.UpArrow:
+						if (select > 0)
+							select--;
+						break;
+					case ConsoleKey.LeftArrow:
+						select = 0;
+						break;
+					case ConsoleKey.RightArrow:
+						select = 5;
+						break;
+					case ConsoleKey.Enter:
+						if (select == 0)
+						{
+							Console.Clear();
+							Console.CursorVisible = true;
+							AddClient(B);
+							Console.Clear();
+							Console.CursorVisible = false;
+						}
+						else
+						if (select == 1)
+						{
+							Console.Clear();
+							Console.CursorVisible = true;
+							if (B.Client.Count == 0)
+							{
+								Console.Write("Bank have no client, create?(y/n): ");
+								char ans = Console.ReadKey(true).KeyChar;
+								if (ans == 'y')
+								{ 
+									Console.Clear();
+									AddClient(B);
+								}
+							}
+							else
+								Operation(B);
+
+							Console.Clear();
+							Console.CursorVisible = false;
+						}
+						else
+						if (select == 5)
+						{ 
+							Console.Clear();
+							Environment.Exit(0);
+						}
+						break;     
                 }
 			}					
         }
