@@ -25,85 +25,121 @@ namespace BankName
             this.balance = balance;
             this.currency = currency;
         }
-
-		public CashInTransaction CashIn()
+        //--------------------------------------------------------------
+        public CashInTransaction CashIn()
 		{
-			Console.Write($"Input sum(in {CurrencyName(currency)}): ");
-			balance += Convert.ToDouble(Console.ReadLine());
-			Console.WriteLine($"Balance: {balance}{CurrencyName(currency)}");
-			CashInTransaction ct = new CashInTransaction(balance, DateTime.Now, this);
-			return ct;
+            try
+            {
+                Console.Write($"Input sum(in {CurrencyName(currency)}): ");
+                balance += Convert.ToDouble(Console.ReadLine());
+                Console.WriteLine($"Balance: {balance}{CurrencyName(currency)}");
+                CashInTransaction ct = new CashInTransaction(balance, DateTime.Now, this);
+                return ct;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.Read();
+                return null;
+            }
 		}
-
-		public WithDrawTransaction WithDraw()
+        //--------------------------------------------------------------
+        public WithDrawTransaction WithDraw()
 		{
-			if (balance == 0)
-			{ 
-				Console.WriteLine("Your balance is 0!");
-				return null;
-			}
-			else
-			{ 
-				Console.WriteLine($"Balance: {balance}{CurrencyName(currency)}");
-				Console.Write("Sum for out: ");
-				int sum = Convert.ToInt32(Console.ReadLine());
-				if (balance - sum > 0)
-				{
-					Console.WriteLine($"Balance: {balance - sum}{CurrencyName(currency)}");
-					WithDrawTransaction wt = new WithDrawTransaction(balance, DateTime.Now, this);
-					return wt;
-				}
-				else
-				{ 
-					Console.WriteLine($"You have not enough money for this transaction!");
-					return null;
-				}
-			}
+            try
+            {
+                if (balance == 0)
+                {
+                    Console.WriteLine("Your balance is 0!");
+                    return null;
+                }
+                else
+                {
+                    Console.WriteLine($"Balance: {balance}{CurrencyName(currency)}");
+                    Console.Write("Sum for out: ");
+                    int sum = Convert.ToInt32(Console.ReadLine());
+                    if (balance - sum > 0)
+                    {
+                        Console.WriteLine($"Balance: {balance - sum}{CurrencyName(currency)}");
+                        WithDrawTransaction wt = new WithDrawTransaction(balance, DateTime.Now, this);
+                        return wt;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"You have not enough money for this transaction!");
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.Read();
+                return null;
+            }
 		}
-
-		public TransferTransaction Transfer(BaseClient obj)
+        //--------------------------------------------------------------
+        public TransferTransaction Transfer(BaseClient obj)
 		{
-			Console.WriteLine($"From {surname} {name} to {obj.surname} {obj.name}");
-			Console.WriteLine($"Your balance: {balance}");
-			Console.Write($"Input sum for transfer: ");
-			int sum = Convert.ToInt32(Console.ReadLine());
-			if (balance - sum > 0)
-			{
-				Console.WriteLine($"Balance: {balance - sum}{CurrencyName(currency)}");
-				TransferTransaction tt = new TransferTransaction(balance, DateTime.Now, obj, this);
-				return tt;
-			}
-			else
-			{ 
-				Console.WriteLine($"You have not enough money for this transaction!");
-				return null;
-			}
+            try
+            {
+                Console.WriteLine($"From {surname} {name} to {obj.surname} {obj.name}");
+                Console.WriteLine($"Your balance: {balance}");
+                Console.Write($"Input sum for transfer: ");
+                int sum = Convert.ToInt32(Console.ReadLine());
+                if (balance - sum > 0)
+                {
+                    Console.WriteLine($"Balance: {balance - sum}{CurrencyName(currency)}");
+                    TransferTransaction tt = new TransferTransaction(balance, DateTime.Now, obj, this);
+                    return tt;
+                }
+                else
+                {
+                    Console.WriteLine($"You have not enough money for this transaction!");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.Read();
+                return null;
+            }
 		}
-
-		private string CurrencyName(Currency cur)
+        //--------------------------------------------------------------
+        private string CurrencyName(Currency cur)
 		{
-			switch (cur)
-			{
-				case Currency.USD:
-					return "USD";
-				case Currency.RUB:
-					return "RUB";
-				case Currency.AZN:
-					return "AZN";
-				case Currency.EUR:
-					return "EUR";
-			}
+            try
+            {
+                switch (cur)
+                {
+                    case Currency.USD:
+                        return "USD";
+                    case Currency.RUB:
+                        return "RUB";
+                    case Currency.AZN:
+                        return "AZN";
+                    case Currency.EUR:
+                        return "EUR";
+                }
 
-			return "Error Currency!";
+                return "Error Currency!";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.Read();
+                return null;
+            }
 		}
+        //--------------------------------------------------------------
+        //public int CompareTo(object obj)
+        //{
+        //	if (this is Client)
+        //	{
 
-		//public int CompareTo(object obj)
-		//{
-		//	if (this is Client)
-		//	{
-
-		//	}
-		//}
-	}
+        //	}
+        //}
+    }
 }
 //--------------------------------------------------------------

@@ -12,8 +12,8 @@ namespace BankName
 	{
 		public List<BaseClient> Client = new List<BaseClient>();
 		public List<ITransaction> Transaction = new List<ITransaction>();
-
-		void SaveTransaction()
+        //--------------------------------------------------------------
+        void SaveTransaction()
 		{
 			string path = @"Log.txt";
 
@@ -30,13 +30,13 @@ namespace BankName
 				}
 			}
 		}
-
-		public IEnumerator GetEnumerator()
+        //--------------------------------------------------------------
+        public IEnumerator GetEnumerator()
 		{
 			return (IEnumerator)this;
 		}
-
-		public delegate void BankOperation();
+        //--------------------------------------------------------------
+        public delegate void BankOperation();
 		public event BankOperation Bankrot;
 		public event BankOperation PersUp;
     }

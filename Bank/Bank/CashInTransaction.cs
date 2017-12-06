@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 //--------------------------------------------------------------
 namespace BankName
 {
-	class CashInTransaction : ITransaction
+    class CashInTransaction : ITransaction
 	{
 		BaseClient to;
 
