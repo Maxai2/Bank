@@ -12,12 +12,12 @@ namespace BankName
 		public string name;
 		public string surname;
 		public string address;
-		public char[] password = new char[4];
+		public string password;
 
         public double balance { get; set; }
         public Currency currency { get; set; }
 
-		public BaseClient(double percent, string name, string surname, string address, double balance, Currency currency, char[] password) 
+		public BaseClient(double percent, string name, string surname, string address, double balance, Currency currency, string password) 
         {
             this.percent = percent;
             this.name = name;
