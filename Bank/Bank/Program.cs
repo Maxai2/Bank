@@ -123,8 +123,15 @@ namespace BankName
             else
                 goto BAL;
 
-			Console.Write("Password: ");
-			string password = Console.ReadLine();
+            Console.WriteLine();
+            Console.Write("\nPIN(only 4 digital namber): ");
+            string password = null;
+
+            for (int i = 0; i < 4; i++)
+            {
+                int ctemp = Console.ReadKey().KeyChar;
+                password += Convert.ToChar(ctemp);
+            }
 
             Console.WriteLine();
             Console.WriteLine("Check");
@@ -133,7 +140,7 @@ namespace BankName
             Console.WriteLine($"Address: {address}");
             Console.WriteLine($"Balance: {balance}");
             Console.WriteLine($"Currency: {curtemp}");
-			Console.WriteLine($"Password: {password}\n");
+            Console.WriteLine($"PIN: {password}\n");
             Console.Write("Allright or again?(y/n): ");
             ans = Console.ReadKey(true).KeyChar;
 
@@ -153,12 +160,12 @@ namespace BankName
                     break;
                 case ConsoleKey.D2:
                 case ConsoleKey.NumPad2:
-                    GoldenClient gctemp = new GoldenClient(name, surname, address, balance, curtemp);
+                    GoldenClient gctemp = new GoldenClient(name, surname, address, balance, curtemp, password);
                     b.Client.Add(gctemp);
                     break;
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
-                    PlatinumClient pctemp = new PlatinumClient(name, surname, address, balance, curtemp);
+                    PlatinumClient pctemp = new PlatinumClient(name, surname, address, balance, curtemp, password);
                     b.Client.Add(pctemp);
                     break;
             }
@@ -168,105 +175,177 @@ namespace BankName
         {
             int count = 0;
             Console.ForegroundColor = ConsoleColor.Gray;
-            for (int i = 0; i < b.Client.Count; i++, count++) {}
+            for (int i = 0; i < b.Client.Count; i++, count++) { }
 
             Console.SetCursorPosition(25, 0);
             Console.WriteLine($"Client Count: {count}");
         }
-		//--------------------------------------------------------------
-		static void Operation(Bank b)
-		{
-			Console.WriteLine("Select, how u want sort clients");
-			Console.WriteLine("1 - Name");
-			Console.WriteLine("2 - Surname");
-			Console.WriteLine("3 - Balane");
-			Console.WriteLine("4 - Curreny");
-			Console.WriteLine("5 - Percent");
+        //--------------------------------------------------------------
+        static string[] OpearationName = { "Cash In", "Cash Out", "Transfer" };
 
-			var key = Console.ReadKey(true).Key;
-			switch (key)
-			{
-				case ConsoleKey.D1:
-				case ConsoleKey.NumPad1:
-					b.Client.Sort();
-				break;
-			}
-
-			Console.WriteLine();
-			foreach (var item in b.Client)
-			{
-				Console.WriteLine($"{item.name} {item.surname}");				
-			}
-		}
-		//--------------------------------------------------------------        
-		static void Main(string[] args)
+        static void OperationMenu(int select)
         {
-			Bank B = new Bank();
-			int select = 0;
-			Console.CursorVisible = false;
+            short pos = 3;
+            for (int i = 0; i < OpearationName.Length; i++)
+            {
+                Console.SetCursorPosition(0, i + pos);
+                Console.WriteLine("             ");
+                Console.SetCursorPosition(0, i + pos);
 
-			while (true)
-			{
-				menu(select);
+                if (select == i)
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                else
+                    Console.ForegroundColor = ConsoleColor.Gray;
+
+                Console.WriteLine(OpearationName[i]);
+            }
+        }
+        //--------------------------------------------------------------
+        static void Clear()
+        {
+            Console.SetCursorPosition(0, 9);
+
+            for (int i = 0; i < 5; i++)
+                Console.WriteLine("                       ");
+        }
+        //--------------------------------------------------------------
+        static void Operation(Bank b)
+        {
+            Console.Write("Input PIN: ");
+            string password = null;
+            bool found = false;
+            int ClientId = 0;
+
+            for (int i = 0; i < 4; i++)
+            {
+                int ctemp = Console.ReadKey().KeyChar;
+                password += Convert.ToChar(ctemp);
+            }
+
+            for (int i = 0; i < b.Client.Count; i++)
+            {
+                if (b.Client[i].password == password)
+                {
+                    found = true;
+                    ClientId = i;
+                    break;
+                }
+            }
+
+            Console.WriteLine();
+            if (!found)
+            {
+                Console.WriteLine("Error PIN!");
+                goto EXIT;
+            }
+            else
+            {
+                Console.CursorVisible = false;
+                Console.WriteLine($"\nWelcome {b.Client[ClientId].surname} {b.Client[ClientId].name}");
+                int select = 0;
+
+                while (true)
+                {
+                    OperationMenu(select);
+
+                    var key = Console.ReadKey(true).Key;
+
+                    switch (key)
+                    {
+                        case ConsoleKey.DownArrow:
+                            if (select < OpearationName.Length - 1)
+                                select++;
+                            break;
+                        case ConsoleKey.UpArrow:
+                            if (select > 0)
+                                select--;
+                            break;
+                        case ConsoleKey.Enter:
+                            if (select == 0)
+                            {
+                                Console.SetCursorPosition(0, 9);
+                                Console.CursorVisible = true;
+                                b.Transaction.Add(b.Client[ClientId].CashIn());
+                                Clear();
+                                Console.CursorVisible = false;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            EXIT:
+            Console.WriteLine();
+        }
+        //--------------------------------------------------------------        
+        static void Main(string[] args)
+        {
+            Bank B = new Bank();
+            int select = 0;
+            Console.CursorVisible = false;
+
+            while (true)
+            {
+                menu(select);
                 ClientByCard(B);
 
-				var key = Console.ReadKey(true).Key;
+                var key = Console.ReadKey(true).Key;
 
-				switch (key)
-				{
-					case ConsoleKey.DownArrow:
-						if (select < menuName.Length - 1)
-							select++;
-						break;
-					case ConsoleKey.UpArrow:
-						if (select > 0)
-							select--;
-						break;
-					case ConsoleKey.LeftArrow:
-						select = 0;
-						break;
-					case ConsoleKey.RightArrow:
-						select = 5;
-						break;
-					case ConsoleKey.Enter:
-						if (select == 0)
-						{
-							Console.Clear();
-							Console.CursorVisible = true;
-							AddClient(B);
-							Console.Clear();
-							Console.CursorVisible = false;
-						}
-						else
-						if (select == 1)
-						{
-							Console.Clear();
-							Console.CursorVisible = true;
-							if (B.Client.Count == 0)
-							{
-								Console.Write("Bank have no client, create?(y/n): ");
-								char ans = Console.ReadKey(true).KeyChar;
-								if (ans == 'y')
-								{ 
-									Console.Clear();
-									AddClient(B);
-								}
-							}
-							else
-								Operation(B);
+                switch (key)
+                {
+                    case ConsoleKey.DownArrow:
+                        if (select < menuName.Length - 1)
+                            select++;
+                        break;
+                    case ConsoleKey.UpArrow:
+                        if (select > 0)
+                            select--;
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        select = 0;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        select = 5;
+                        break;
+                    case ConsoleKey.Enter:
+                        if (select == 0)
+                        {
+                            Console.Clear();
+                            Console.CursorVisible = true;
+                            AddClient(B);
+                            Console.Clear();
+                            Console.CursorVisible = false;
+                        }
+                        else
+                        if (select == 1)
+                        {
+                            Console.Clear();
+                            Console.CursorVisible = true;
+                            if (B.Client.Count == 0)
+                            {
+                                Console.Write("Bank have no client, create?(y/n): ");
+                                char ans = Console.ReadKey(true).KeyChar;
+                                if (ans == 'y')
+                                {
+                                    Console.Clear();
+                                    AddClient(B);
+                                }
+                            }
+                            else
+                                Operation(B);
 
-							Console.Clear();
-							Console.CursorVisible = false;
-						}
-						else
-						if (select == 5)
-						{ 
-							Console.Clear();
-							Environment.Exit(0);
-						}
-						break;     
+                            Console.Clear();
+                            Console.CursorVisible = false;
+                        }
+                        else
+                        if (select == 5)
+                        {
+                            Console.Clear();
+                            Environment.Exit(0);
+                        }
+                        break;
                 }
-			}					
+            }
         }
     }
 }
