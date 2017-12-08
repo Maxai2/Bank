@@ -8,16 +8,16 @@ namespace BankName
 {
     abstract class BaseClient : IAccount, IComparable
     {
-        public double percent;
-        public string name;
-        public string surname;
-        public string address;
-        public string password;
+		public double percent;
+		public string name;
+		public string surname;
+		public string address;
+		public string password;
 
         public double balance { get; set; }
         public Currency currency { get; set; }
 
-        public BaseClient(double percent, string name, string surname, string address, double balance, Currency currency, string password)
+		public BaseClient(double percent, string name, string surname, string address, double balance, Currency currency, string password) 
         {
             this.percent = percent;
             this.name = name;
@@ -25,11 +25,11 @@ namespace BankName
             this.address = address;
             this.balance = balance;
             this.currency = currency;
-            this.password = password;
+			this.password = password;
         }
         //--------------------------------------------------------------
         public CashInTransaction CashIn()
-        {
+		{
             try
             {
                 Console.Write($"Input sum(in {CurrencyName(currency)}): ");
@@ -44,10 +44,10 @@ namespace BankName
                 Console.Read();
                 return null;
             }
-        }
+		}
         //--------------------------------------------------------------
         public WithDrawTransaction WithDraw()
-        {
+		{
             try
             {
                 if (balance == 0)
@@ -79,10 +79,10 @@ namespace BankName
                 Console.Read();
                 return null;
             }
-        }
+		}
         //--------------------------------------------------------------
         public TransferTransaction Transfer(BaseClient obj)
-        {
+		{
             try
             {
                 Console.WriteLine($"From {surname} {name} to {obj.surname} {obj.name}");
@@ -107,10 +107,10 @@ namespace BankName
                 Console.Read();
                 return null;
             }
-        }
+		}
         //--------------------------------------------------------------
         private string CurrencyName(Currency cur)
-        {
+		{
             try
             {
                 switch (cur)
@@ -133,16 +133,16 @@ namespace BankName
                 Console.Read();
                 return null;
             }
-        }
-        //--------------------------------------------------------------
-        public int CompareTo(object obj)
-        {
-            if (name == ((obj as BaseClient).name))
-            {
-                return 1;
-            }
-            return -1;
-        }
-    }
+		}
+		//--------------------------------------------------------------
+		public int CompareTo(object obj)
+		{
+			if (name == ((obj as BaseClient).name))
+			{
+				return 1;
+			}
+			return -1;
+		}
+	}
 }
 //--------------------------------------------------------------
