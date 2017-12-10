@@ -32,9 +32,9 @@ namespace BankName
 		{
             try
             {
-                Console.Write($"Input sum(in {CurrencyName(currency)}): ");
+                Console.Write($"Input sum(in {Functions.getInstance().CurrencyName(currency)}): ");
                 balance += Convert.ToDouble(Console.ReadLine());
-                Console.WriteLine($"Balance: {balance}{CurrencyName(currency)}");
+                Console.WriteLine($"Balance: {balance}{Functions.getInstance().CurrencyName(currency)}");
                 CashInTransaction ct = new CashInTransaction(balance, DateTime.Now, this);
                 return ct;
             }
@@ -57,12 +57,12 @@ namespace BankName
                 }
                 else
                 {
-                    Console.WriteLine($"Balance: {balance}{CurrencyName(currency)}");
+                    Console.WriteLine($"Balance: {balance}{Functions.getInstance().CurrencyName(currency)}");
                     Console.Write("Sum for out: ");
                     int sum = Convert.ToInt32(Console.ReadLine());
                     if (balance - sum > 0)
                     {
-                        Console.WriteLine($"Balance: {balance - sum}{CurrencyName(currency)}");
+                        Console.WriteLine($"Balance: {balance - sum}{Functions.getInstance().CurrencyName(currency)}");
                         WithDrawTransaction wt = new WithDrawTransaction(balance, DateTime.Now, this);
                         return wt;
                     }
@@ -91,7 +91,7 @@ namespace BankName
                 int sum = Convert.ToInt32(Console.ReadLine());
                 if (balance - sum > 0)
                 {
-                    Console.WriteLine($"Balance: {balance - sum}{CurrencyName(currency)}");
+                    Console.WriteLine($"Balance: {balance - sum}{Functions.getInstance().CurrencyName(currency)}");
                     TransferTransaction tt = new TransferTransaction(balance, DateTime.Now, obj, this);
                     return tt;
                 }
@@ -100,32 +100,6 @@ namespace BankName
                     Console.WriteLine($"You have not enough money for this transaction!");
                     return null;
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.Read();
-                return null;
-            }
-		}
-        //--------------------------------------------------------------
-        private string CurrencyName(Currency cur)
-		{
-            try
-            {
-                switch (cur)
-                {
-                    case Currency.USD:
-                        return "USD";
-                    case Currency.RUB:
-                        return "RUB";
-                    case Currency.AZN:
-                        return "AZN";
-                    case Currency.EUR:
-                        return "EUR";
-                }
-
-                return "Error Currency!";
             }
             catch (Exception ex)
             {

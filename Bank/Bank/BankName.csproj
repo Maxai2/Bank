@@ -47,6 +47,7 @@
     <Compile Include="BaseClient.cs" />
     <Compile Include="CashInTransaction.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="Functions.cs" />
     <Compile Include="GoldenClient.cs" />
     <Compile Include="IAccount.cs" />
     <Compile Include="ITransaction.cs" />

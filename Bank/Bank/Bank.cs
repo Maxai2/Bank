@@ -10,7 +10,7 @@ namespace BankName
 {
 	class Bank : IEnumerable, IEnumerator
 	{
-		public List<BaseClient> Client = new List<BaseClient>();
+		public List<BaseClient> Clients = new List<BaseClient>();
 		public List<ITransaction> Transaction = new List<ITransaction>();
 
 		//--------------------------------------------------------------
@@ -34,7 +34,7 @@ namespace BankName
 		//--------------------------------------------------------------
 		int current = -1;
 
-		public object Current => Client[current];
+		public object Current => Clients[current];
 
         public IEnumerator GetEnumerator()
 		{
@@ -44,7 +44,7 @@ namespace BankName
 		public bool MoveNext()
 		{
 			current++;
-			return current < Client.Count;
+			return current < Clients.Count;
 		}
 
 		public void Reset()
