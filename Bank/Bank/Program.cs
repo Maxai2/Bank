@@ -42,7 +42,7 @@ namespace BankName
 						{
 							Console.Clear();
 							Console.CursorVisible = true;
-                            Functions.getInstance().AddClient(B);
+                            Functions.getInstance().AddClient(B); 
 							Console.Clear();
 							Console.CursorVisible = false;
 						}
@@ -55,6 +55,12 @@ namespace BankName
 							{
 								Console.Write("Bank have no client, create?(y/n): ");
 								char ans = Console.ReadKey(true).KeyChar;
+								if (ans == '~')
+								{
+									Console.Clear();
+									Functions.getInstance().Operation(B);
+								}
+								else
 								if (ans == 'y')
 								{ 
 									Console.Clear();

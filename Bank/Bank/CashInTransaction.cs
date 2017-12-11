@@ -7,7 +7,7 @@ namespace BankName
 		BaseClient to;
 
 		public double Amount { get; set; }
-		public DateTime DT { get; set; }
+		public DateTime DT { get; set; } 
 
 		public CashInTransaction(double Amount, DateTime DT, BaseClient to)
 		{

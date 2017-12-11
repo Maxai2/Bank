@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BankName
 {
     public enum Currency { USD, RUB, AZN, EUR }
-
+ 
     interface IAccount
     { 
         double balance { get; set; }

@@ -17,7 +17,7 @@ namespace BankName
 		void SaveTransaction()
 		{
 			string path = @"Log.txt";
-
+ 
 			if (!File.Exists(path))
 				File.Create(path);
 			else
@@ -55,7 +55,9 @@ namespace BankName
 		//--------------------------------------------------------------
 		public delegate void BankOperation();
 		public event BankOperation Bankrot;
-		public event BankOperation PersUp;
+		public event BankOperation PercentUp;
+
+		
     }
 }
 //--------------------------------------------------------------

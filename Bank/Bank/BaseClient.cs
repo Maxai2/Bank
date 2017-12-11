@@ -99,7 +99,7 @@ namespace BankName
                 {
                     Console.WriteLine($"You have not enough money for this transaction!");
                     return null;
-                }
+                } 
             }
             catch (Exception ex)
             {
@@ -116,6 +116,11 @@ namespace BankName
 				return 1;
 			}
 			return -1;
+		}
+		//--------------------------------------------------------------
+		public void MonthPlus()
+		{
+			balance += (balance * percent) / 100.0;
 		}
 	}
 }

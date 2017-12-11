@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 //--------------------------------------------------------------
 namespace BankName
 {
-	class PlatinumClient : BaseClient
+	class PlatinumClient : BaseClient 
 	{
 		public PlatinumClient(string name, string surname, string address, double balance, Currency currency, string password, double percent = 1) : 
             base(percent, name, surname, address, balance, currency, password)

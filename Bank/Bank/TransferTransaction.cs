@@ -9,7 +9,7 @@ namespace BankName
 	class TransferTransaction : ITransaction
 	{
 		BaseClient to;
-		BaseClient from;
+		BaseClient from; 
 
 		public double Amount { get; set; }
 		public DateTime DT { get; set; }

@@ -165,6 +165,7 @@ namespace BankName
             for (int i = 0; i < 4; i++)
             {
                 int ctemp = Console.ReadKey().KeyChar;
+				//if (48 <= ctemp && ctemp <= 57)
                 password += Convert.ToChar(ctemp);
             }
 
@@ -211,7 +212,7 @@ namespace BankName
             int SimpleClient = 0;
             int GoldenClient = 0;
             int PlatinumClient = 0;
-            int TotalCount = 0;
+
             Console.ForegroundColor = ConsoleColor.Gray;
 
             for (int i = 0; i < b.Clients.Count; i++)
@@ -239,15 +240,15 @@ namespace BankName
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("-------------------");
             Console.SetCursorPosition(30, 4);
-            Console.WriteLine($"Client Count:\t{TotalCount}");
+            Console.WriteLine($"Client Count:\t{SimpleClient + GoldenClient + PlatinumClient}");
         }
         //--------------------------------------------------------------
-        static string[] OpearationName = { "Cash In", "Cash Out", "Transfer" };
-        static string[] BossMenuName = { "Month +", "Bankrot", "Clear Transaction" };
+        static string[] OpearationName = { "Cash In", "Cash Out", "Transfer", "Back To Menu" };
+        static string[] BossMenuName = { "Month +", "Bankrot", "Clear Transaction", "Back To Menu" };
 
         static void OperationMenu(int select)
         {
-            short pos = 3;
+            short pos = 5;
             for (int i = 0; i < OpearationName.Length; i++)
             {
                 Console.SetCursorPosition(0, i + pos);
@@ -265,7 +266,7 @@ namespace BankName
 
         static void BossOperationMenu(int select)
         {
-            short pos = 3;
+            short pos = 5;
             for (int i = 0; i < BossMenuName.Length; i++)
             {
                 Console.SetCursorPosition(0, i + pos);
@@ -277,7 +278,7 @@ namespace BankName
                 else
                     Console.ForegroundColor = ConsoleColor.Gray;
 
-                Console.WriteLine(BossMenuName[i]);
+                Console.WriteLine(BossMenuName[i]); 
             }
         }
         //--------------------------------------------------------------
@@ -288,8 +289,17 @@ namespace BankName
             for (int i = 0; i < 5; i++)
                 Console.WriteLine("                       ");
         }
-        //--------------------------------------------------------------
-        public void Operation(Bank b)
+		//--------------------------------------------------------------
+		static void MonthPlus(Bank b)
+		{
+			foreach (var item in b.Clients)
+			{ 
+				b.PercentUp += item.MonthPlus;
+
+			}
+		}
+		//--------------------------------------------------------------
+		public void Operation(Bank b)
         {
             Console.Write("Input PIN: ");
             string password = null;
@@ -319,30 +329,40 @@ namespace BankName
                 }
             }
 
-            BOSS:
-            Console.WriteLine();
-
-            if (!found)
+			BOSS:
+            if (!found && !boss)
             {
+				Console.WriteLine();
                 Console.WriteLine("Error PIN!");
                 goto EXIT;
             }
             else
             {
-                Console.CursorVisible = false;
-                boss == true ? Console.WriteLine("\nWelcome BOSS") : Console.WriteLine($"\nWelcome {b.Clients[ClientId].surname} {b.Clients[ClientId].name}");
+				Console.WriteLine();
+				Console.CursorVisible = false;
+				if (boss)
+					Console.WriteLine("\nWelcome BOSS");
+				else
+				{ 
+					Console.WriteLine($"\nWelcome {b.Clients[ClientId].surname} {b.Clients[ClientId].name}");
+					Console.WriteLine($"Balance: {b.Clients[ClientId].balance}");
+				}
+
                 int select = 0;
 
                 while (true)
                 {
-                    OperationMenu(select);
+					if (boss)
+						BossOperationMenu(select);
+					else
+						OperationMenu(select);
 
                     var key = Console.ReadKey(true).Key;
 
                     switch (key)
                     {
                         case ConsoleKey.DownArrow:
-                            if (select < OpearationName.Length - 1)
+                            if (select < (boss ? BossMenuName.Length - 1 : OpearationName.Length - 1))
                                 select++;
                             break;
                         case ConsoleKey.UpArrow:
@@ -354,17 +374,24 @@ namespace BankName
                             {
                                 Console.SetCursorPosition(0, 9);
                                 Console.CursorVisible = true;
-                                b.Transaction.Add(b.Clients[ClientId].CashIn());
+								if (boss)
+									MonthPlus(b);
+								else
+									b.Transaction.Add(b.Clients[ClientId].CashIn());
                                 Console.Read();
                                 Clear();
                                 Console.CursorVisible = false;
                             }
+							else
+							if (select == 3)
+								goto EXIT;
                             break;
                     }
                 }
             }
 
-            EXIT:
+			EXIT:
+			boss = false;
             Console.WriteLine();
         }
     }

@@ -8,7 +8,7 @@ namespace BankName
 {
     interface ITransaction
     {
-        double Amount { get; set; }
+        double Amount { get; set; } 
         DateTime DT { get; set; }
     }
 }
