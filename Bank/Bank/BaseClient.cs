@@ -17,6 +17,8 @@ namespace BankName
         public double balance { get; set; }
         public Currency currency { get; set; }
 
+        private bool bankrot = false;
+
 		public BaseClient(double percent, string name, string surname, string address, double balance, Currency currency, string password) 
         {
             this.percent = percent;
@@ -32,11 +34,19 @@ namespace BankName
 		{
             try
             {
-                Console.Write($"Input sum(in {Functions.getInstance().CurrencyName(currency)}): ");
-                balance += Convert.ToDouble(Console.ReadLine());
-                Console.WriteLine($"Balance: {balance}{Functions.getInstance().CurrencyName(currency)}");
-                CashInTransaction ct = new CashInTransaction(balance, DateTime.Now, this);
-                return ct;
+                if (!bankrot)
+                {
+                    Console.Write($"Input sum(in {Functions.getInstance().CurrencyName(currency)}): ");
+                    balance += Convert.ToDouble(Console.ReadLine());
+                    Console.WriteLine($"Balance: {balance}{Functions.getInstance().CurrencyName(currency)}");
+                    CashInTransaction ct = new CashInTransaction(balance, DateTime.Now, this);
+                    return ct;
+                }
+                else
+                {
+                    Console.WriteLine("Bank is Bankrot!");
+                    return null;
+                }
             }
             catch (Exception ex)
             {
@@ -50,27 +60,35 @@ namespace BankName
 		{
             try
             {
-                if (balance == 0)
+                if (!bankrot)
                 {
-                    Console.WriteLine("Your balance is 0!");
-                    return null;
-                }
-                else
-                {
-                    Console.WriteLine($"Balance: {balance}{Functions.getInstance().CurrencyName(currency)}");
-                    Console.Write("Sum for out: ");
-                    int sum = Convert.ToInt32(Console.ReadLine());
-                    if (balance - sum > 0)
+                    if (balance == 0)
                     {
-                        Console.WriteLine($"Balance: {balance - sum}{Functions.getInstance().CurrencyName(currency)}");
-                        WithDrawTransaction wt = new WithDrawTransaction(balance, DateTime.Now, this);
-                        return wt;
+                        Console.WriteLine("Your balance is 0!");
+                        return null;
                     }
                     else
                     {
-                        Console.WriteLine($"You have not enough money for this transaction!");
-                        return null;
+                        Console.WriteLine($"Balance: {balance}{Functions.getInstance().CurrencyName(currency)}");
+                        Console.Write("Sum for out: ");
+                        int sum = Convert.ToInt32(Console.ReadLine());
+                        if (balance - sum > 0)
+                        {
+                            Console.WriteLine($"Balance: {balance - sum}{Functions.getInstance().CurrencyName(currency)}");
+                            WithDrawTransaction wt = new WithDrawTransaction(balance, DateTime.Now, this);
+                            return wt;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"You have not enough money for this transaction!");
+                            return null;
+                        }
                     }
+                }
+                else
+                {
+                    Console.WriteLine("Bank is Bankrot!");
+                    return null;
                 }
             }
             catch (Exception ex)
@@ -85,21 +103,29 @@ namespace BankName
 		{
             try
             {
-                Console.WriteLine($"From {surname} {name} to {obj.surname} {obj.name}");
-                Console.WriteLine($"Your balance: {balance}");
-                Console.Write($"Input sum for transfer: ");
-                int sum = Convert.ToInt32(Console.ReadLine());
-                if (balance - sum > 0)
+                if (!bankrot)
                 {
-                    Console.WriteLine($"Balance: {balance - sum}{Functions.getInstance().CurrencyName(currency)}");
-                    TransferTransaction tt = new TransferTransaction(balance, DateTime.Now, obj, this);
-                    return tt;
+                    Console.WriteLine($"From {surname} {name} to {obj.surname} {obj.name}");
+                    Console.WriteLine($"Your balance: {balance}");
+                    Console.Write($"Input sum for transfer: ");
+                    int sum = Convert.ToInt32(Console.ReadLine());
+                    if (balance - sum > 0)
+                    {
+                        Console.WriteLine($"Balance: {balance - sum}{Functions.getInstance().CurrencyName(currency)}");
+                        TransferTransaction tt = new TransferTransaction(balance, DateTime.Now, obj, this);
+                        return tt;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"You have not enough money for this transaction!");
+                        return null;
+                    } 
                 }
                 else
                 {
-                    Console.WriteLine($"You have not enough money for this transaction!");
+                    Console.WriteLine("Bank is Bankrot!");
                     return null;
-                } 
+                }
             }
             catch (Exception ex)
             {
@@ -122,6 +148,11 @@ namespace BankName
 		{
 			balance += (balance * percent) / 100.0;
 		}
-	}
+        //--------------------------------------------------------------
+        public void BankrotGo()
+        {
+            bankrot = !bankrot;
+        }
+    }
 }
 //--------------------------------------------------------------

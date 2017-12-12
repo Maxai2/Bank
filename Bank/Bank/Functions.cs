@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -286,19 +287,70 @@ namespace BankName
         {
             Console.SetCursorPosition(0, 9);
 
-            for (int i = 0; i < 5; i++)
-                Console.WriteLine("                       ");
+            for (int i = 0; i < 7; i++)
+                Console.WriteLine("                                                       ");
         }
 		//--------------------------------------------------------------
 		static void MonthPlus(Bank b)
 		{
-            foreach (var item in b.Clients)
+            try
             {
-                b.PercentUp += item.MonthPlus;
+                foreach (var item in b.Clients)
+                {
+                    b.PercentUp += item.MonthPlus;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
-		//--------------------------------------------------------------
-		public void Operation(Bank b)
+        //--------------------------------------------------------------
+        static void BankrotGo(Bank b)
+        {
+            try
+            {
+                foreach (var item in b.Clients)
+                {
+                    b.Bankrot += item.BankrotGo;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+        //--------------------------------------------------------------
+        static void ClearTransactionFile(Bank b)
+        {
+            File.Delete(b.path);
+        }
+        //--------------------------------------------------------------
+        static int FindClientForTransfer(Bank b, int MySelf)
+        {
+            for (int i = 0; i < b.Clients.Count; i++)
+            {
+                if (b.Clients[i] is Client)
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                else
+                if (b.Clients[i] is GoldenClient)
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                else
+                if (b.Clients[i] is PlatinumClient)
+                    Console.ForegroundColor = ConsoleColor.White;
+
+                if (i != MySelf)
+                    Console.WriteLine($"{i + 1}. {b.Clients[i].surname} {b.Clients[i].name}");
+            }
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("-------------------------------");
+            Console.Write("Select Client: ");
+            int temp = Convert.ToInt32(Console.ReadLine()) - 1;
+            return temp;
+        }
+        //--------------------------------------------------------------
+        public void Operation(Bank b)
         {
             Console.Write("Input PIN: ");
             string password = null;
@@ -373,20 +425,65 @@ namespace BankName
                             {
                                 Console.SetCursorPosition(0, 9);
                                 Console.CursorVisible = true;
+                                Console.WriteLine("--------------------------");
                                 if (boss)
                                 {
-									MonthPlus(b);
-                                    b.invoke();
+                                    if (b.Clients.Count != 0)
+                                    {
+                                        MonthPlus(b);
+                                        b.PercentInvoke();
+                                        Console.WriteLine("Month +: OK!");
+                                    }
+                                    else
+                                        Console.WriteLine("No Clients BOSS!");
                                 }
-								else
-									b.Transaction.Add(b.Clients[ClientId].CashIn());
+                                else
+                                    b.Transaction.Add(b.Clients[ClientId].CashIn());
                                 Console.Read();
                                 Clear();
                                 Console.CursorVisible = false;
                             }
-							else
-							if (select == 3)
-								goto EXIT;
+                            else
+                            if (select == 1)
+                            {
+                                Console.SetCursorPosition(0, 9);
+                                Console.CursorVisible = true;
+                                Console.WriteLine("--------------------------");
+                                if (boss)
+                                {
+                                    BankrotGo(b);
+                                    b.BankrotInvoke();
+                                    Console.WriteLine("Ok!");
+                                }
+                                else
+                                    b.Transaction.Add(b.Clients[ClientId].WithDraw());
+                                Console.Read();
+                                Clear();
+                                Console.CursorVisible = false;
+                            }
+                            else
+                            if (select == 2)
+                            {
+                                Console.SetCursorPosition(0, 9);
+                                Console.CursorVisible = true;
+                                Console.WriteLine("--------------------------");
+                                if (boss)
+                                {
+                                    ClearTransactionFile(b);
+                                    Console.WriteLine("Ok!");
+                                }
+                                else
+                                if (b.Clients.Count == 1)
+                                    Console.WriteLine("You are the only person in the group!");
+                                else
+                                    b.Transaction.Add(b.Clients[ClientId].Transfer(b.Clients[FindClientForTransfer(b, ClientId)]));
+                                Console.Read();
+                                Clear();
+                                Console.CursorVisible = false;
+                            }
+                            else
+                            if (select == 3)
+                                goto EXIT;
                             break;
                     }
                 }

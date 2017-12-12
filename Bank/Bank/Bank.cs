@@ -13,11 +13,10 @@ namespace BankName
 		public List<BaseClient> Clients = new List<BaseClient>();
 		public List<ITransaction> Transaction = new List<ITransaction>();
 
-		//--------------------------------------------------------------
-		public void SaveTransaction()
-		{
-			string path = @"Log.txt";
- 
+        public string path = @"Log.txt";
+        //--------------------------------------------------------------
+        public void SaveTransaction()
+        { 
 			if (!File.Exists(path))
 				File.Create(path);
 			else
@@ -52,12 +51,17 @@ namespace BankName
 			current = -1;
 		}
         //--------------------------------------------------------------
-        public void invoke()
+        public void PercentInvoke()
         {
             PercentUp.Invoke();
         }
-		//--------------------------------------------------------------
-		public delegate void BankOperation();
+        //--------------------------------------------------------------
+        public void BankrotInvoke()
+        {
+            PercentUp.Invoke();
+        }
+        //--------------------------------------------------------------
+        public delegate void BankOperation();
 		public event BankOperation Bankrot;
 		public event BankOperation PercentUp;
     }
