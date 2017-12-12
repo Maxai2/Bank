@@ -77,7 +77,8 @@ namespace BankName
 						if (select == 2)
 						{ 
 							Console.Clear();
-							Environment.Exit(0);
+                            B.SaveTransaction();
+                            Environment.Exit(0);
 						}
 						break;     
                 }

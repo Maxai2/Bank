@@ -292,12 +292,11 @@ namespace BankName
 		//--------------------------------------------------------------
 		static void MonthPlus(Bank b)
 		{
-			foreach (var item in b.Clients)
-			{ 
-				b.PercentUp += item.MonthPlus;
-
-			}
-		}
+            foreach (var item in b.Clients)
+            {
+                b.PercentUp += item.MonthPlus;
+            }
+        }
 		//--------------------------------------------------------------
 		public void Operation(Bank b)
         {
@@ -345,7 +344,7 @@ namespace BankName
 				else
 				{ 
 					Console.WriteLine($"\nWelcome {b.Clients[ClientId].surname} {b.Clients[ClientId].name}");
-					Console.WriteLine($"Balance: {b.Clients[ClientId].balance}");
+					Console.WriteLine($"Balance: {b.Clients[ClientId].balance} {b.Clients[ClientId].currency}");
 				}
 
                 int select = 0;
@@ -374,8 +373,11 @@ namespace BankName
                             {
                                 Console.SetCursorPosition(0, 9);
                                 Console.CursorVisible = true;
-								if (boss)
+                                if (boss)
+                                {
 									MonthPlus(b);
+                                    b.invoke();
+                                }
 								else
 									b.Transaction.Add(b.Clients[ClientId].CashIn());
                                 Console.Read();

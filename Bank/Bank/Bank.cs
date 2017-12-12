@@ -14,7 +14,7 @@ namespace BankName
 		public List<ITransaction> Transaction = new List<ITransaction>();
 
 		//--------------------------------------------------------------
-		void SaveTransaction()
+		public void SaveTransaction()
 		{
 			string path = @"Log.txt";
  
@@ -51,13 +51,15 @@ namespace BankName
 		{
 			current = -1;
 		}
-
+        //--------------------------------------------------------------
+        public void invoke()
+        {
+            PercentUp.Invoke();
+        }
 		//--------------------------------------------------------------
 		public delegate void BankOperation();
 		public event BankOperation Bankrot;
 		public event BankOperation PercentUp;
-
-		
     }
 }
 //--------------------------------------------------------------
