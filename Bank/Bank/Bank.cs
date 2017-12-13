@@ -58,7 +58,7 @@ namespace BankName
         //--------------------------------------------------------------
         public void BankrotInvoke()
         {
-            PercentUp.Invoke();
+            Bankrot.Invoke();
         }
         //--------------------------------------------------------------
         public delegate void BankOperation();
